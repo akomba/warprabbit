@@ -18,13 +18,13 @@ def main():
     for instance in pawcards:
         if instance["interacted_at"]:
             clicked.append(instance["card_id"])
-            print(">>> paw was clicked") 
+            print("paw was clicked") 
             v = float(instance["value"])
             card = collection.card(instance["card_id"])
             card.increase_attribute_value(config["reward_id"],config["paw_amount"])
-            print(">>> reward increased by",config["paw_amount"]) 
+            print("reward increased by",config["paw_amount"]) 
             card.remove_attribute(config["paw_id"])
-            print(">>> paw was removed") 
+            print("paw was removed") 
 
     print("has paws:",len(pawcards))
     print("clicked:",clicked)

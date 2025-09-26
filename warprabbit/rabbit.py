@@ -17,7 +17,7 @@ class Rabbit(object):
         
         # warp the rabbit to another location
         self.card = card
-        self.card.add_attribute(self.attribute_id)
+        self.card.add_attribute(self.attribute_id,1)
    
     def is_ready_to_warp(self):
         return self.warp_counter() <= 0
