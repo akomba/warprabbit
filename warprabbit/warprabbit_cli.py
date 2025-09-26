@@ -10,7 +10,7 @@ import time
 import glx.helper as helper
 
 APPNAME = "warprabbit"
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 def main():
     if "--version" in sys.argv[1:]:
@@ -41,13 +41,13 @@ def main():
     collection = Collection(config["community_name"],config["collection_id"])
     rabbitcards = Attribute(config["community_name"],config["collection_id"],config["rabbit_id"]).instances()
     card_ids = [int(m["id"]) for m in collection.cards(raw=True) if (not int(m["id"]) in [rc["card_id"] for rc in rabbitcards])]
-   
 
     # create more if less than max_rabbits
     rabbits_on_the_field = len(rabbitcards)
     for r in range(config["max_rabbits"]-rabbits_on_the_field):
-        print("new rabbit added")
-        collection.card(random.choice(card_ids)).add_attribute(config["rabbit_id"],1)
+        newcard = random.choice(card_ids)
+        print("new rabbit added:",newcard)
+        collection.card(newcard).add_attribute(config["rabbit_id"],1)
 
     # loop all instances of the rabbit that was caught (interacted with)
     for r in rabbitcards:
@@ -55,7 +55,7 @@ def main():
         if r["interacted_at"] or rabbit.card.has_attribute(config["rabbitmaster_id"]):
             rabbit.card.increase_attribute_value(config["reward_id"],config["reward_amount"])
             rabbit.kill()
-            print("Rabbit caught, added +1 to holy hand grenade")
+            print("Rabbit caught, added +"+str(config["reward_amount"])+" to holy hand grenade")
         else:
             if rabbit.is_ready_to_warp():
                 rabbit.card.increase_attribute_value(config["paw_id"],config["paw_amount"],3600)
