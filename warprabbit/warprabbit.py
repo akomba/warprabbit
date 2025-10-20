@@ -21,7 +21,8 @@ CONFIG_TEMPLATE = {
     "paw_id":False,
     "paw_amount": 0.1,
     "rabbitmaster_id": False,
-    "max_rabbits": 16
+    "max_rabbits": 16,
+    "repeat": 1
 }
 
 
