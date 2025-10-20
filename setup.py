@@ -24,7 +24,7 @@ with io.open(os.path.join(CURDIR, "README.md"), "r", encoding="utf-8") as f:
 
 
 def get_version():
-    main_file = os.path.join(CURDIR, "warprabbit", "warprabbit_cli.py")
+    main_file = os.path.join(CURDIR, "warprabbit", "warprabbit.py")
     _version_re = re.compile(r"__version__\s+=\s+(?P<version>.*)")
     with open(main_file, "r", encoding="utf8") as f:
         match = _version_re.search(f.read())
@@ -46,8 +46,8 @@ setup(
     keywords=[],
     scripts=[],
     entry_points={"console_scripts": [
-        "warprabbit=warprabbit.warprabbit_cli:main",
-        "pawclaimer=warprabbit.pawclaimer_cli:main"
+        "warprabbit=warprabbit.warprabbit:main",
+        "pawclaimer=warprabbit.pawclaimer:main"
         ]},
     #data_files=[("share/man/man6", ["man/warprabbit.6"])],
     zip_safe=False,
