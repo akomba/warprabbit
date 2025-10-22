@@ -12,7 +12,7 @@ from glx.logger import Logger
 import argparse
 
 APPNAME = "warprabbit"
-__version__ = "0.0.3"
+__version__ = "0.0.4"
 
 CONFIG_TEMPLATE = { 
     "rabbit_id":False,
@@ -26,8 +26,7 @@ CONFIG_TEMPLATE = {
 }
 
 
-def main(community_name=None):
-
+def run():
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", "--version", action="store_true")
     parser.add_argument("-a", "--add", type=int)
@@ -38,13 +37,16 @@ def main(community_name=None):
         print(__version__)
         exit(0)
 
-    # find community
+    if not args.community:
+        print(APPNAME,"No community name is given, exiting.")
+        return False
+    else:
+        run(args.community)
+
+def main(community_name=None):
     if not community_name:
-        if args.community:
-            community_name = args.community
-        else:
-            print(APPNAME,"No community name is given, exiting.")
-            return False
+        print(APPNAME,"No community name is given, exiting.")
+        return False
     
     
     config = helper.load_or_create_app_config(community_name,APPNAME,CONFIG_TEMPLATE)
@@ -56,13 +58,13 @@ def main(community_name=None):
     rabbitcards = Attribute(community_name,config["collection_id"],config["rabbit_id"]).instances()
     card_ids = [int(m["id"]) for m in collection.cards(raw=True) if (not int(m["id"]) in [rc["card_id"] for rc in rabbitcards])]
     
-    if args.add:
-        # add a new rabbit to the given card
-        # (used for testing)
-        Logger().logger.info("WR new rabbit insreted "+str(args.add))
-        collection.card(args.add).add_attribute(config["rabbit_id"],1)
-        print("Rabbit added to",args.add)
-        exit()
+    #if args.add:
+    #    # add a new rabbit to the given card
+    #    # (used for testing)
+    #    Logger().logger.info("WR new rabbit insreted "+str(args.add))
+    #    collection.card(args.add).add_attribute(config["rabbit_id"],1)
+    #    print("Rabbit added to",args.add)
+    #    exit()
 
     # replenish rabbits
     rabbits_on_the_field = len(rabbitcards)
@@ -99,4 +101,4 @@ def interact(community_name, app_name, card_id, data=None):
     print("Rabbit on "+str(card_id)+" caught, added +"+str(config["reward_amount"])+" to reward attribute ("+str(config["reward_id"])+")")
  
 if __name__ == "__main__":
-    main()
+    run()
