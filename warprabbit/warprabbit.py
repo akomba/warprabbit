@@ -12,7 +12,7 @@ from glx.logger import Logger
 import argparse
 
 APPNAME = "warprabbit"
-__version__ = "0.0.4"
+__version__ = "0.5"
 
 CONFIG_TEMPLATE = { 
     "rabbit_id":False,
@@ -24,7 +24,6 @@ CONFIG_TEMPLATE = {
     "max_rabbits": 16,
     "repeat": 1
 }
-
 
 def run():
     parser = argparse.ArgumentParser()
@@ -41,13 +40,12 @@ def run():
         print(APPNAME,"No community name is given, exiting.")
         return False
     else:
-        run(args.community)
+        main(args.community)
 
 def main(community_name=None):
     if not community_name:
         print(APPNAME,"No community name is given, exiting.")
         return False
-    
     
     config = helper.load_or_create_app_config(community_name,APPNAME,CONFIG_TEMPLATE)
     Logger().init(community_name)
@@ -82,7 +80,7 @@ def main(community_name=None):
             interact(community_name,APPNAME,r["card_id"])
         else:
             if rabbit.is_ready_to_warp():
-                rabbit.card.increase_attribute_value(config["paw_id"],config["paw_amount"],3600)
+                rabbit.card.increase_attribute_value(config["paw_id"],config["paw_amount"],60*24)
                 rabbit.warp(collection.card(random.choice(card_ids))) # inside selects time
                 print("rabbit warped to", str(rabbit.card.id))
                 Logger().logger.info("WR rabbit warped to "+str(rabbit.card.id))
@@ -99,6 +97,3 @@ def interact(community_name, app_name, card_id, data=None):
     rabbit.card.increase_attribute_value(config["reward_id"],config["reward_amount"])
     rabbit.kill()
     print("Rabbit on "+str(card_id)+" caught, added +"+str(config["reward_amount"])+" to reward attribute ("+str(config["reward_id"])+")")
- 
-if __name__ == "__main__":
-    run()

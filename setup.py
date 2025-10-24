@@ -46,8 +46,7 @@ setup(
     keywords=[],
     scripts=[],
     entry_points={"console_scripts": [
-        "warprabbit=warprabbit.warprabbit:main",
-        "pawclaimer=warprabbit.pawclaimer:main"
+        "warprabbit=warprabbit.warprabbit:run"
         ]},
     #data_files=[("share/man/man6", ["man/warprabbit.6"])],
     zip_safe=False,
