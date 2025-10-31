@@ -2,37 +2,33 @@
 from glx.collection import Collection
 from glx.attribute import Attribute
 import glx.helper as helper
+import glx.apphelper
 import os
 import toml
 import argparse
 
 APPNAME = "warprabbit"
 
-def main(community_name=None):
-    print("manually rewarding paw clicks")
-    
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--community")
-    args = parser.parse_args()
-    
-    # find community
-    if not community_name:
-        if args.community:
-            community_name = args.community
-        else:
-            print(APPNAME,"No community name is given, exiting.")
-            return False
-    
+def main(community_name):
     config = helper.load_app_config(community_name,APPNAME)
+    if not config:
+        return False
+
     pawatt = Attribute(community_name,config["collection_id"],config["paw_id"])
     pawcards = pawatt.instances()
     for instance in pawcards:
         if instance["interacted_at"]:
-            print(">",instance,"<")
+            print("   *pawclaimer:",instance["card_id"],"interacted.")
             interact(community_name,APPNAME,instance["card_id"])
 
     print("has paws:",len(pawcards))
 
+def cli():
+    print("manually rewarding paw clicks")
+    parser = glx.apphelper.setup_parser()
+    args = parser.parse_args()
+    community_name = glx.apphelper.process_common_args(args,None,APPNAME)
+    main(community_name)
 
 def interact(community_name, app_name, card_id, data=None):
     config = helper.load_app_config(community_name,app_name)

@@ -2,22 +2,18 @@ import random
 import os
 
 class Rabbit(object):
-    MIN_STAY = 20
-    MAX_STAY = 60
-    WARPFOLDER = ".warprabbit"
-    def __init__(self, attribute_id, card):
+    def __init__(self, config, card):
         self.card = card
-        self.attribute_id = attribute_id
         fname = ".countdown_"+str(self.card.id)
-        self.fname = os.path.join(self.WARPFOLDER,fname)
-        os.makedirs(self.WARPFOLDER,exist_ok=True)
+        self.config = config
+        self.fname = os.path.join(self.config["data_folder"],fname)
 
     def warp(self,card):
         self.kill()
         
         # warp the rabbit to another location
         self.card = card
-        self.card.add_attribute(self.attribute_id,1)
+        self.card.add_attribute(self.config["rabbit_id"],1)
    
     def is_ready_to_warp(self):
         return self.warp_counter() <= 0
@@ -28,7 +24,7 @@ class Rabbit(object):
             with open(self.fname) as f:
                 countdown = int(f.read())
         else:
-            countdown = random.randint(self.MIN_STAY,self.MAX_STAY)
+            countdown = random.randint(self.config["min_stay"],self.config["max_stay"])
             self.set_warp_counter(countdown)
         return countdown
 
@@ -47,4 +43,4 @@ class Rabbit(object):
             os.remove(self.fname)
 
         # remove rabbit from card
-        self.card.remove_attribute(self.attribute_id)
+        self.card.remove_attribute(self.config["rabbit_id"])

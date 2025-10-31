@@ -1,0 +1,37 @@
+rabbit_id        = "SETUP" # but rabbit decal id here
+reward_id        = "SETUP" # put reward badge id here
+reward_amount    = 1       # reward for catching the rabbit
+paw_id           = "SETUP" # put paw badge id here
+paw_amount       = 0.1     # reward of a paw 
+rabbitmaster_id  = false   # the rabbitmaster badge (if any) auto-catches the rabbits
+max_rabbits      = 16      # how many rabbits roam at the same time 
+collection_id    = 1       # what collection the rabbits are on?
+min_stay         = 20      # the rabbit stays on the card for minimum {min_stay} iterations
+max_stay         = 60      # the rabbit stays on the card for maximum {max_stay} iterations
+
+[[loops]]        # this one moves the rabbits
+name             = "rabbit loop"
+repeat           = 1       # the the looper will iterate the rabbits every {repeat} mintues
+module           = "warprabbit.warprabbit"
+
+[[loops]]        # claims the paw clicks in case the websocket is broken
+name             = "pawclaimer"
+repeat           = 1       # the the looper will iterate the rabbits every {repeat} mintues
+module           = "warprabbit.pawclaimer"
+
+
+[[interactions]]
+name             = "rabbit caught"
+event            = "CardAttributeInteracted"
+attribute_id     = "!rabbit_id"
+module           = "warprabbit.warprabbit"
+collection_id    = 1            # it is redundant but we must specify collection_id here as well
+                                # because this is the only part of the config that gets passed
+        
+[[interactions]]
+name             = "paw clicked"
+event            = "CardAttributeInteracted"
+attribute_id     = "!paw_id"
+module           = "warprabbit.pawclaimer"
+collection_id    = 1            # it is redundant but we must specify collection_id here as well
+                                # because this is the only part of the config that gets passed
